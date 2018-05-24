@@ -3,6 +3,8 @@ import ctypes
 import multiprocessing as mp
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+import sys
 
 def generateNodes(N):
     """ Generate random 3D nodes
@@ -108,10 +110,10 @@ def mpCalcDistance(nodes):
     D = np.reshape(np.frombuffer(arrD), (nP, nQ))
     return D
 
-def compareTimes():
+def compareTimes(N = 3000):
     """ Compare execution time single processing versus multiple processing.
     """
-    nodes = generateNodes(3000)
+    nodes = generateNodes(N)
     
     t0 = time.time()
     spD = spCalcDistance(nodes)
@@ -126,11 +128,11 @@ def compareTimes():
     err = np.linalg.norm(mpD - spD)
     print("calculate error: {:.2e}".format(err))
     
-def showTimePlot():    
+def showTimePlot(N_start = 100, N_stop = 4000, step = 4):
     """ Generate execution time plot single processing versus multiple processing.
     """
     
-    N = range(100, 4000, 4)
+    N = range(N_start, N_stop, step)
     spTimes = []
     mpTimes = []
     rates = []
@@ -165,8 +167,17 @@ def showTimePlot():
     plt.show()
 
 def main():
-    compareTimes()
-    showTimePlot()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--compare', type = int, help = 'If you want to compare results of single and multy processes with N points.' )
+    parser.add_argument('-p','--plot', help = 'Shows plots to single and multy process times to computing Radial matrix and dencity plot.', action = 'store_true')
+    parser.add_argument('-st','--start', type = int)
+    parser.add_argument('-sp','--stop', type = int)
+    parser.add_argument('-s','--step',type = int)
+    args = parser.parse_args()
+    print(args.__dict__)
+
+    #compareTimes()
+    #showTimePlot()
 
 if __name__ == '__main__':
     main()
