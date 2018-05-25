@@ -167,17 +167,35 @@ def showTimePlot(N_start = 100, N_stop = 4000, step = 4):
     plt.show()
 
 def main():
+
+    if len(sys.argv) == 1:
+        print(
+            'Default test:\nCompare multi and single to N = 3000\nShow plots for nodes from N_start = 100 to  N_stop = 4000 with step = 4\n')
+        compareTimes()
+        showTimePlot()
+        return
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--compare', type = int, help = 'If you want to compare results of single and multy processes with N points.' )
-    parser.add_argument('-p','--plot', help = 'Shows plots to single and multy process times to computing Radial matrix and dencity plot.', action = 'store_true')
-    parser.add_argument('-st','--start', type = int)
-    parser.add_argument('-sp','--stop', type = int)
-    parser.add_argument('-s','--step',type = int)
+    parser.add_argument('-c', '--compare',nargs = '?', const = 3000, type = int, help = 'If you want to compare results of single and multi processes with N points.' )
+    parser.add_argument('-p','--plot', help = 'Shows plots to single and multi process times to computing Radial matrix and density plot.', action = 'store_true')
+    parser.add_argument('-st','--start', nargs = '?', const = 100, type = int, help = 'Starts plotting from start_num of nodes\n')
+    parser.add_argument('-sp','--stop',nargs = '?', const = 4000, type = int, help = 'Stops plotting with stop_nom of nodes\n')
+    parser.add_argument('-s','--step',nargs = '?', const = 4,type = int, help = 'Step of plotting.\n')
     args = parser.parse_args()
     print(args.__dict__)
 
-    #compareTimes()
-    #showTimePlot()
+    N,start_num,stop_num =0
+
+
+    if args.compare is not None:
+
+        print("Fuck you!")
+
+
+
+
+
+
 
 if __name__ == '__main__':
     main()
