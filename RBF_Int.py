@@ -41,7 +41,7 @@ def mpCalcDistance_Worker(nodes, queue, arrD):
 
     while True:
         job = queue.get()
-        if job == None:
+        if job is None:
             break
 
         start = job[0]
@@ -114,7 +114,8 @@ def compareTimes(N = 3000):
     """ Compare execution time single processing versus multiple processing.
     """
     nodes = generateNodes(N)
-    
+    print('Number of nodes:',N)
+
     t0 = time.time()
     spD = spCalcDistance(nodes)
     t1 = time.time()
@@ -169,32 +170,37 @@ def showTimePlot(N_start = 100, N_stop = 4000, step = 4):
 def main():
 
     if len(sys.argv) == 1:
-        print(
-            'Default test:\nCompare multi and single to N = 3000\nShow plots for nodes from N_start = 100 to  N_stop = 4000 with step = 4\n')
+        print('Default test:\nCompare multi and single to N = 3000\nShow plots for nodes from N_start = 100 to  N_stop = 4000 with step = 4\n')
         compareTimes()
         showTimePlot()
         return
 
+    start_num, stop_num, step = 100, 4000, 4
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--compare',nargs = '?', const = 3000, type = int, help = 'If you want to compare results of single and multi processes with N points.' )
     parser.add_argument('-p','--plot', help = 'Shows plots to single and multi process times to computing Radial matrix and density plot.', action = 'store_true')
-    parser.add_argument('-st','--start', nargs = '?', const = 100, type = int, help = 'Starts plotting from start_num of nodes\n')
-    parser.add_argument('-sp','--stop',nargs = '?', const = 4000, type = int, help = 'Stops plotting with stop_nom of nodes\n')
-    parser.add_argument('-s','--step',nargs = '?', const = 4,type = int, help = 'Step of plotting.\n')
+    parser.add_argument('-st','--start', nargs = '?', const = start_num, type = int, help = 'Starts plotting from start_num of nodes\n')
+    parser.add_argument('-sp','--stop',nargs = '?', const = stop_num, type = int, help = 'Stops plotting with stop_nom of nodes\n')
+    parser.add_argument('-s','--step',nargs = '?', const = step,type = int, help = 'Step of plotting.\n')
     args = parser.parse_args()
-    print(args.__dict__)
-
-    N,start_num,stop_num =0
+    #print(args.__dict__)
 
 
     if args.compare is not None:
+        compareTimes(args.compare)
 
-        print("Fuck you!")
+    if args.start is not  None:
+        start_num = args.start
 
+    if args.stop is not None:
+        stop_num = args.stop
 
+    if args.step is not  None:
+        step = args.step
 
-
-
+    if args.plot is True:
+        showTimePlot(start_num,stop_num,step)
 
 
 if __name__ == '__main__':
