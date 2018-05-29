@@ -1,4 +1,5 @@
 import time
+import sys
 import ctypes
 import multiprocessing as mp
 import numpy as np
@@ -7,7 +8,6 @@ import matplotlib.pyplot as plt
 def generateNodes(N):
     """ Generate random 3D nodes
     """
-    
     return np.random.rand(N, 3)
 
 def spCalcDistance(nodes):
@@ -72,7 +72,7 @@ def mpCalcDistance(nodes):
    
     # setup jobs
     #nCPU = mp.cpu_count()
-    nCPU = 2
+    nCPU = 2 ######################################################### Закомментировать? ###################################33
     nJobs = nCPU * 36
    
     q = nP // nJobs
@@ -108,10 +108,10 @@ def mpCalcDistance(nodes):
     D = np.reshape(np.frombuffer(arrD), (nP, nQ))
     return D
 
-def compareTimes():
+def compareTimes(int Num_points):
     """ Compare execution time single processing versus multiple processing.
     """
-    nodes = generateNodes(3000)
+    nodes = generateNodes(Num_points)
     
     t0 = time.time()
     spD = spCalcDistance(nodes)
@@ -126,7 +126,7 @@ def compareTimes():
     err = np.linalg.norm(mpD - spD)
     print("calculate error: {:.2e}".format(err))
     
-def showTimePlot():    
+def showTimePlot():   #####################################  Добавить аргументы ##############################################
     """ Generate execution time plot single processing versus multiple processing.
     """
     
@@ -165,6 +165,9 @@ def showTimePlot():
     plt.show()
 
 def main():
+    print("Please type 0 - if you want to find out how many cores is available on your computer.")
+    #print("Please type 1 - if you want to ")
+    read nCPU
     compareTimes()
     showTimePlot()
 
