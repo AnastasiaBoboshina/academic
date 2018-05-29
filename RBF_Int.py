@@ -4,6 +4,8 @@ import ctypes
 import multiprocessing as mp
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+import sys
 
 def generateNodes(N):
     """ Generate random 3D nodes
@@ -39,7 +41,7 @@ def mpCalcDistance_Worker(nodes, queue, arrD):
 
     while True:
         job = queue.get()
-        if job == None:
+        if job is None:
             break
 
         start = job[0]
@@ -108,11 +110,20 @@ def mpCalcDistance(nodes):
     D = np.reshape(np.frombuffer(arrD), (nP, nQ))
     return D
 
+<<<<<<< HEAD
 def compareTimes(int Num_points):
     """ Compare execution time single processing versus multiple processing.
     """
     nodes = generateNodes(Num_points)
     
+=======
+def compareTimes(N = 3000):
+    """ Compare execution time single processing versus multiple processing.
+    """
+    nodes = generateNodes(N)
+    print('Number of nodes:',N)
+
+>>>>>>> d7bffe5244f38c8567248aebc06985ee59130765
     t0 = time.time()
     spD = spCalcDistance(nodes)
     t1 = time.time()
@@ -126,11 +137,15 @@ def compareTimes(int Num_points):
     err = np.linalg.norm(mpD - spD)
     print("calculate error: {:.2e}".format(err))
     
+<<<<<<< HEAD
 def showTimePlot():   #####################################  Добавить аргументы ##############################################
+=======
+def showTimePlot(N_start = 100, N_stop = 4000, step = 4):
+>>>>>>> d7bffe5244f38c8567248aebc06985ee59130765
     """ Generate execution time plot single processing versus multiple processing.
     """
     
-    N = range(100, 4000, 4)
+    N = range(N_start, N_stop, step)
     spTimes = []
     mpTimes = []
     rates = []
@@ -165,11 +180,48 @@ def showTimePlot():   #####################################  Добавить а
     plt.show()
 
 def main():
+<<<<<<< HEAD
     print("Please type 0 - if you want to find out how many cores is available on your computer.")
     #print("Please type 1 - if you want to ")
     read nCPU
     compareTimes()
     showTimePlot()
+=======
+
+    if len(sys.argv) == 1:
+        print('Default test:\nCompare multi and single to N = 3000\nShow plots for nodes from N_start = 100 to  N_stop = 4000 with step = 4\n')
+        compareTimes()
+        showTimePlot()
+        return
+
+    start_num, stop_num, step = 100, 4000, 4
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--compare',nargs = '?', const = 3000, type = int, help = 'If you want to compare results of single and multi processes with N points.' )
+    parser.add_argument('-p','--plot', help = 'Shows plots to single and multi process times to computing Radial matrix and density plot.', action = 'store_true')
+    parser.add_argument('-st','--start', nargs = '?', const = start_num, type = int, help = 'Starts plotting from start_num of nodes\n')
+    parser.add_argument('-sp','--stop',nargs = '?', const = stop_num, type = int, help = 'Stops plotting with stop_nom of nodes\n')
+    parser.add_argument('-s','--step',nargs = '?', const = step,type = int, help = 'Step of plotting.\n')
+    args = parser.parse_args()
+    #print(args.__dict__)
+
+
+    if args.compare is not None:
+        compareTimes(args.compare)
+
+    if args.start is not  None:
+        start_num = args.start
+
+    if args.stop is not None:
+        stop_num = args.stop
+
+    if args.step is not  None:
+        step = args.step
+
+    if args.plot is True:
+        showTimePlot(start_num,stop_num,step)
+
+>>>>>>> d7bffe5244f38c8567248aebc06985ee59130765
 
 if __name__ == '__main__':
     main()
